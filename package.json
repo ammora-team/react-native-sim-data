@@ -20,6 +20,9 @@
     "sim",
     "phone number"
   ],
+  "devDependencies": {
+    "typescript": "^2.9.0"
+  },
   "optionalDependencies": {
     "@types/react-native": "*"
   },
