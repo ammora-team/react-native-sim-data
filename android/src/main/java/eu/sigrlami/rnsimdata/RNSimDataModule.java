@@ -13,10 +13,13 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.Callback;
+import android.os.Build;
 
 public class RNSimDataModule extends ReactContextBaseJavaModule {
 
   ReactApplicationContext reactContext;
+
+  TelephonyManager telManager;
 
   public RNSimDataModule(ReactApplicationContext reactContext) {
     super(reactContext);
@@ -69,9 +72,16 @@ public class RNSimDataModule extends ReactContextBaseJavaModule {
         constants.put("phoneNumber"      + sub, number);
         constants.put("deviceId"         + sub, deviceId);
         constants.put("simSerialNumber"  + sub, iccId);
-        constants.put("simState"         + sub, simState);
         constants.put("dataActivity"     + sub, dataActivity);
         constants.put("subscriptionId"   + sub, subscriptionId);
+        constants.put("defaultSim"       + sub, getDefaultSim());
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+          constants.put("simState" + sub, telManager.getSimState(simSlotIndex));
+        } else {
+          constants.put("simState" + sub, simState);
+        }
+
         sub++;
       }
     } catch (Exception e) {
@@ -79,5 +89,21 @@ public class RNSimDataModule extends ReactContextBaseJavaModule {
     }
 
     return constants;
+  }
+
+  private int getDefaultSim() {
+
+    Method method_getDefaultSim;
+    int defaultSimm = -1;
+    try {
+        method_getDefaultSim = telManager.getClass().getDeclaredMethod("getDefaultSim");
+        method_getDefaultSim.setAccessible(true);
+        defaultSimm = (Integer) method_getDefaultSim.invoke(telManager);
+    } catch (Exception e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+    }
+
+    return defaultSimm;
   }
 }
