@@ -53,6 +53,7 @@ public class RNSimDataModule extends ReactContextBaseJavaModule {
         int subscriptionId       = subInfo.getSubscriptionId();
         boolean networkRoaming   = telManager.isNetworkRoaming();
         String deviceId          = telManager.getDeviceId(simSlotIndex);
+        int simState             = telManager.getSimState();
         //String deviceId          = telManager.getImei(simSlotIndex) || telManager.getMeid(simSlotIndex);
 
         constants.put("carrierName" + sub, carrierName.toString());
@@ -66,6 +67,7 @@ public class RNSimDataModule extends ReactContextBaseJavaModule {
         constants.put("phoneNumber"      + sub, number);
         constants.put("deviceId"         + sub, deviceId);
         constants.put("simSerialNumber"  + sub, iccId);
+        constants.put("simState"         + sub, simState);
         constants.put("subscriptionId"   + sub, subscriptionId);
         sub++;
       }
