@@ -76,7 +76,9 @@ public class RNSimDataModule extends ReactContextBaseJavaModule {
         constants.put("simSerialNumber"  + sub, iccId);
         constants.put("dataActivity"     + sub, dataActivity);
         constants.put("subscriptionId"   + sub, subscriptionId);
-        constants.put("defaultSubscriptionId" + sub, defaultSubscriptionId);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+          constants.put("defaultSubscriptionId" + sub, defaultSubscriptionId);
+        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
           constants.put("simState" + sub, telManager.getSimState(simSlotIndex));
@@ -91,21 +93,5 @@ public class RNSimDataModule extends ReactContextBaseJavaModule {
     }
 
     return constants;
-  }
-
-  private int getDefaultSim() {
-
-    Method method_getDefaultSim;
-    int defaultSimm = -1;
-    try {
-        method_getDefaultSim = telManager.getClass().getDeclaredMethod("getDefaultSim");
-        method_getDefaultSim.setAccessible(true);
-        defaultSimm = (Integer) method_getDefaultSim.invoke(telManager);
-    } catch (Exception e) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
-    }
-
-    return defaultSimm;
   }
 }
